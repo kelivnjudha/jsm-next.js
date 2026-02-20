@@ -1,6 +1,17 @@
 "use client";
 
+import { useRole } from "./RoleContext";
+
+const roleBadge: Record<string, { bg: string; text: string }> = {
+  admin:       { bg: "bg-red-100",    text: "text-red-700" },
+  manager:     { bg: "bg-amber-100",  text: "text-amber-700" },
+  salesperson: { bg: "bg-emerald-100", text: "text-emerald-700" },
+};
+
 export default function Navbar({ onMenuToggle }: { onMenuToggle: () => void }) {
+  const { role } = useRole();
+  const badge = roleBadge[role];
+
   return (
     <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
       <div className="flex items-center justify-between h-16 px-4 sm:px-6">
@@ -30,6 +41,13 @@ export default function Navbar({ onMenuToggle }: { onMenuToggle: () => void }) {
 
         {/* Right: actions */}
         <div className="flex items-center gap-3">
+          {/* Role badge */}
+          <span
+            className={`hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${badge.bg} ${badge.text}`}
+          >
+            {role}
+          </span>
+
           {/* Notification bell */}
           <button className="relative p-2 rounded-md text-gray-500 hover:bg-gray-100">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,8 +57,8 @@ export default function Navbar({ onMenuToggle }: { onMenuToggle: () => void }) {
           </button>
 
           {/* Profile avatar (mobile) */}
-          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold lg:hidden">
-            A
+          <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white text-sm font-semibold lg:hidden">
+            {role[0].toUpperCase()}
           </div>
         </div>
       </div>
